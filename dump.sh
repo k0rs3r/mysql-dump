@@ -26,13 +26,13 @@ if [[ ${ALL_DATABASES} == "" ]]; then
 		echo "Missing DB_NAME env variable"
 		exit 1
 	fi
-	mysqldump --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" "$@" "${DB_NAME}" > /mysqldump/"${DB_NAME}"-$(date +%Y-%m-%d-%H.%M.%S).sql
+	mysqldump --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" "$@" "${DB_NAME}" > /mysqldump/"${DB_NAME}"-$(date +%Y-%m-%d).sql
 else
 	databases=`mysql --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" -e "SHOW DATABASES;" | tr -d "| " | grep -v Database`
 for db in $databases; do
     if [[ "$db" != "information_schema" ]] && [[ "$db" != "performance_schema" ]] && [[ "$db" != "mysql" ]] && [[ "$db" != _* ]] && [[ "$db" != "$IGNORE_DATABASE" ]]; then
         echo "Dumping database: $db"
-        mysqldump --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --databases $db > /mysqldump/$db-$(date +%Y-%m-%d-%H.%M.%S).sql
+        mysqldump --user="${DB_USER}" --password="${DB_PASS}" --host="${DB_HOST}" --databases $db > /mysqldump/$db-$(date +%Y-%m-%d).sql
     fi
 done
 fi
